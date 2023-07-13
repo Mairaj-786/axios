@@ -15,8 +15,22 @@ api.interceptors.response.use(
       // Redirect the user to the login page or perform any other desired action
       window.location.href = '/login';
     }
+    
     return Promise.reject(error);
   }
 );
+
+// Add an interceptor to include the JWT Bearer token in the headers
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+  
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+  
+    return config;
+  }, (error) => {
+    return Promise.reject(error);
+  });
 
 export default api;
